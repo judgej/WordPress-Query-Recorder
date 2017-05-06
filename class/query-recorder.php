@@ -116,6 +116,18 @@ class Query_Recorder {
 
 		// check if SQL has an ending semicolon and add if it doesn't
 		$save_sql = substr( rtrim( $sql ), -1 ) == ';' ? $sql : $sql . ' ;';
+		$db = debug_backtrace() ;
+		$length = count($db);
+		$r = array();
+
+		for ($i = 0; $i < $length; $i++) {
+			if (isset($db[$i]['file']) && isset($db[$i]['line']) && isset($db[$i]['function'])) {
+				$r[] = $db[$i]['file'].' '.$db[$i]['line'].': '.$db[$i]['function'];
+			}
+		}
+
+		$save_sql .= "\r\n".implode( "\r\n", $r )."\r\n\r\n"; 
+
 		file_put_contents( $this->options['saved_queries_file_path'], $save_sql . "\n", FILE_APPEND );
 
 		return $sql;
@@ -205,7 +217,7 @@ class Query_Recorder {
 		extract( $this->options, EXTR_SKIP );
 
 		// these types of queries can be recorded, others cannot
-		$recordable_queries = apply_filters( 'query_recorder_recordable_queries', array( 'INSERT', 'UPDATE', 'DELETE', 'DROP', 'CREATE' ) );
+		$recordable_queries = apply_filters( 'query_recorder_recordable_queries', array( 'INSERT', 'UPDATE', 'DELETE', 'DROP', 'CREATE', 'SELECT' ) );
 
 		// process the content for the "Exclude queries containing" textarea
 		$exclude_queries = ( empty( $exclude_queries ) ) ? '' : implode( "\n", $exclude_queries );

@@ -3,8 +3,8 @@
 Plugin Name: Query Recorder
 Plugin URI: http://deliciousbrains.com
 Description: Record SQL queries to a text file to run later
-Author: Delicious Brains
-Version: 1.0.1
+Author: Delicious Brains, Jason Judge
+Version: 1.0.2
 Author URI: http://deliciousbrains.com
 */
 
